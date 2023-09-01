@@ -1,8 +1,10 @@
 import logging
-
+from aiogram import executor
 import configparser
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+from messages.user_messages import message_text
 
 # Установка уровня логирования
 logging.basicConfig(level=logging.INFO)
@@ -19,27 +21,16 @@ dp = Dispatcher(bot)
 # Обработчик команды /start
 @dp.message_handler(commands=['start'])
 async def start_command(message: types.Message):
-    message_text = ("<b>Приветствую тебя, сногсшибательная леди!</b>\n\n"
-                    "Королевская осанка, точеный силуэт, подтянутые высокие ягодицы, плоский живот, стройные ноги - все это приятные последствия тренировок со мной, твоим персональным тренером Мещеряковой Ольгой.\n\n"
-                    "Пройди регистрацию и забирай домашний комплекс полноценных видео занятий 👇🏽\n\n"
-                    "« регистрация»\n\n"
-                    "Так же я жду тебя на канале с чатом и обратной связью,  где я делюсь :\n"
-                    "- рецептами стройности\n"
-                    "- эффективными упражнениям\n"
-                    "- секретами красоты\n"
-                    "-огромной порцией мотивации !\n"
-                    "https://t.me/body_agency\n\n"
-                    "Буду рада видеть твой отзыв и фото в костюме на wB!!")
-    # Создаем инлайн кнопку "Получить видео"
+    # Создаем InlineKey кнопку "Получить видео"
     get_video_button = InlineKeyboardButton("Получить видео", callback_data="get_video")
-    # Создаем инлайн кнопку "О нас"
+    # Создаем InlineKey кнопку "О нас"
     review_button = InlineKeyboardButton("О нас", callback_data="review")
     inline_keyboard = InlineKeyboardMarkup().row(get_video_button, review_button)
 
     await message.reply(message_text, reply_markup=inline_keyboard)
 
 
-# Обработчик нажатия на инлайн кнопку
+# Обработчик нажатия на InlineKey кнопку
 @dp.callback_query_handler(lambda callback_query: callback_query.data == "get_video")
 async def get_video(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id, "Отправляем вам видео...")
@@ -58,13 +49,6 @@ async def about_us(callback_query: types.CallbackQuery):
 
 # Запуск бота
 if __name__ == '__main__':
-    from aiogram import executor
 
-    executor.start_polling(dp, skip_updates=True)
-
-
-# Запуск бота
-if __name__ == '__main__':
-    from aiogram import executor
 
     executor.start_polling(dp, skip_updates=True)
