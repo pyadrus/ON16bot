@@ -1,16 +1,18 @@
 import logging
 
+import configparser
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # Установка уровня логирования
 logging.basicConfig(level=logging.INFO)
 
-# Токен вашего бота, полученный от @BotFather в Telegram
-BOT_TOKEN = '6465724490:AAGTUbCQ5CqfeWwEQQmkpsApU2n80heFh5w'
+config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
+config.read("setting/config.ini")  # Чтение файла
+bot_token = config.get('BOT_TOKEN', 'BOT_TOKEN')  # Получение токена
 
 # Инициализация бота и диспетчера
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token=bot_token)
 dp = Dispatcher(bot)
 
 
