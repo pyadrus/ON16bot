@@ -15,15 +15,18 @@ async def start_command(message: types.Message):
 @dp.callback_query_handler(lambda callback_query: callback_query.data == "get_video")
 async def get_video(callback_query: types.CallbackQuery):
     """Ответ на нажатие inline кнопки get_video"""
-    await bot.answer_callback_query(callback_query.id, "Отправляем вам видео...")
-    # Здесь можно добавить логику отправки видео пользователю
+    send_video_text = ("Отправляем вам видео...\n"
+                       "<a href='https://youtu.be/JXRep76T4yU'>Видео 1</a>\n"
+                       "<a href='https://youtu.be/59npEilTIjg'>Видео 2</a>\n\n"
+                       "Для возврата нажмите /start")
+    await bot.send_message(callback_query.message.chat.id, send_video_text, disable_web_page_preview=True)
 
 
-@dp.callback_query_handler(lambda callback_query: callback_query.data == "about_us")
+@dp.callback_query_handler(lambda callback_query: callback_query.data == "review")
 async def about_us(callback_query: types.CallbackQuery):
     """Ответ на нажатие inline кнопки about_us"""
     about_us_text = "Отзывы"
-    await bot.answer_callback_query(callback_query.id, about_us_text)
+    await bot.send_message(callback_query.message.chat.id, about_us_text)
 
 
 def greeting_handler():
