@@ -12,7 +12,6 @@ async def start_command(message: types.Message):
     await message.reply(message_text, reply_markup=inline_keyboard)
 
 
-# Обработчик нажатия на InlineKey кнопку
 @dp.callback_query_handler(lambda callback_query: callback_query.data == "get_video")
 async def get_video(callback_query: types.CallbackQuery):
     """Ответ на нажатие inline кнопки get_video"""
