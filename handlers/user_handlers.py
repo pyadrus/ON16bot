@@ -22,13 +22,6 @@ async def get_video(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.message.chat.id, send_video_text, disable_web_page_preview=True)
 
 
-@dp.callback_query_handler(lambda callback_query: callback_query.data == "review")
-async def about_us(callback_query: types.CallbackQuery):
-    """Ответ на нажатие inline кнопки about_us"""
-    about_us_text = "Отзывы"
-    await bot.send_message(callback_query.message.chat.id, about_us_text)
-
-
 def greeting_handler():
     """Регистрируем handlers для бота"""
     dp.register_message_handler(start_command)  # Обработчик команды /start, он же пост приветствия
