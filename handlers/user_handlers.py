@@ -1,6 +1,9 @@
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+import sqlite3
+import datetime
 
+from database.db_manager import recording_user_data
 from keyboards.user_keyboards import welcome_keyboard
 from messages.user_messages import message_text
 from system.dispatcher import dp, bot
@@ -23,6 +26,18 @@ async def contact_keyboard():
 @dp.message_handler(content_types=types.ContentType.CONTACT)
 async def get_contact(message: types.Message):
     contact = message.contact
+
+    # Получение данных
+    user_id = message.from_user.id
+    username = message.from_user.username
+    number_phone = contact.phone_number
+    first_name = message.from_user.first_name
+    last_name = message.from_user.last_name
+    date_now = datetime.datetime.now()
+
+    # Записываем данные в базу данных
+    recording_user_data(user_id, username, number_phone, first_name, last_name, date_now)
+
     await message.answer(f"Спасибо, {contact.full_name}.\nЗа регистрацию")
 
     send_video_text = ("Отправляем вам видео...\n"
