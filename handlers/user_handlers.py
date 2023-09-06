@@ -1,9 +1,10 @@
 import datetime
-
+import sqlite3
 from aiogram import types
 from loguru import logger
-
-from database.db_manager import recording_user_data, check_user_data_exists
+import openpyxl
+from openpyxl.utils import get_column_letter
+from database.db_manager import recording_user_data, check_user_data_exists, database
 from keyboards.user_keyboards import welcome_keyboard, contact_keyboard
 from messages.user_messages import message_text
 from system.dispatcher import dp, bot
@@ -85,6 +86,37 @@ async def get_video(callback_query: types.CallbackQuery):
                         "🔐 Регистрация проводится один раз.\n\n"
                         "<i>Для регистрации, пожалуйста, нажмите кнопку ниже, чтобы отправить контакт. 📱</i>")
         await bot.send_message(callback_query.message.chat.id, text_message, reply_markup=contact_keyboard())
+
+
+# Обработчик команды export_user
+@dp.message_handler(commands=['export_user'])
+async def export_command(message: types.Message):
+    conn = sqlite3.connect(database)
+    cursor = conn.cursor()
+    # Получаем данные всех пользователей из базы данных
+    cursor.execute('SELECT * FROM user_data')
+    data = cursor.fetchall()
+    # Создаем файл Excel и записываем данные
+    wb = openpyxl.Workbook()
+    sheet = wb.active
+    # Записываем заголовки
+    headers = ["user_id", "username", "number_phone", "first_name", "last_name", "date_now"]
+    for col_num, header in enumerate(headers, 1):
+        col_letter = get_column_letter(col_num)
+        sheet[f'{col_letter}1'] = header
+    # Записываем данные пользователей
+    for row_num, row_data in enumerate(data, 2):
+        for col_num, cell_data in enumerate(row_data, 1):
+            col_letter = get_column_letter(col_num)
+            sheet[f'{col_letter}{row_num}'] = cell_data
+    # Сохраняем файл Excel
+    wb.save('users.xlsx')
+    # Отправляем файл пользователю
+    with open('users.xlsx', 'rb') as file:
+        await bot.send_document(message.from_user.id, file, caption='Данные пользователей в формате Excel')
+    # Удаляем файл Excel
+    import os
+    os.remove('users.xlsx')
 
 
 # Функция для регистрации обработчиков сообщений
