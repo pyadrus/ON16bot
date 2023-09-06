@@ -4,6 +4,28 @@ from loguru import logger
 logger.add("setting/log/log.log", rotation="1 MB", compression="zip")
 
 
+# Функция для проверки наличия данных о пользователе в базе данных
+def check_user_data_exists(user_id):
+    try:
+        conn = sqlite3.connect("setting/database.db")
+        cursor = conn.cursor()
+
+        # Выполняем запрос к базе данных для проверки наличия данных о пользователе
+        cursor.execute("SELECT COUNT(*) FROM user_data WHERE user_id=?", (user_id,))
+        result = cursor.fetchone()
+
+        conn.close()
+
+        # Если результат равен 0, значит, данные отсутствуют
+        # Если результат больше 0, значит, данные уже существуют
+        return result[0] > 0
+
+    except Exception as e:
+        logger.exception(e)
+        print("Произошла ошибка, для подробного изучения проблемы просмотрите файл log.log")
+        return False  # Возвращаем False в случае ошибки
+
+
 def recording_user_data(user_id, username, number_phone, first_name, last_name, date_now):
     """Запись данных, новых пользователей в базу данных setting/database.db
     user_id - id пользователя,

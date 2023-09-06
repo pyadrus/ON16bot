@@ -1,4 +1,5 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def welcome_keyboard():
@@ -7,6 +8,13 @@ def welcome_keyboard():
     inline_keyboard = InlineKeyboardMarkup().row(get_video_button)
 
     return inline_keyboard
+
+
+async def contact_keyboard():
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    first_button = KeyboardButton(text="📱 Отправить", request_contact=True)
+    markup.add(first_button)
+    return markup
 
 
 if __name__ == "__main__":
