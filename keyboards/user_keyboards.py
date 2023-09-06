@@ -11,6 +11,7 @@ def welcome_keyboard():
 
 
 def contact_keyboard():
+    """Клавиатура отправки отчетов"""
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     first_button = KeyboardButton(text="📱 Отправить", request_contact=True)
     markup.add(first_button)
