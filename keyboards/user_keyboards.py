@@ -10,7 +10,7 @@ def welcome_keyboard():
     return inline_keyboard
 
 
-async def contact_keyboard():
+def contact_keyboard():
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     first_button = KeyboardButton(text="📱 Отправить", request_contact=True)
     markup.add(first_button)
