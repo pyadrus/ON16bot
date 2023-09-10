@@ -25,23 +25,19 @@ def check_user_data_exists(user_id):
 def record_user_to_db(user_id, username, first_name, last_name, date_now):
     """
     Записывает информацию о пользователе в базу данных SQLite.
-
     Параметры:
     - user_id (int): Идентификатор пользователя.
     - username (str): Логин пользователя (если доступен).
     - first_name (str): Имя пользователя.
     - last_name (str): Фамилия пользователя.
     - date_now (datetime.datetime): Дата и время регистрации пользователя.
-
     Внутренние действия:
     1. Устанавливает соединение с базой данных (или создает базу данных, если её нет).
     2. Создает курсор для выполнения SQL-запросов.
     3. Вставляет данные пользователя в таблицу user_data.
     4. Выполняет коммит и закрывает соединение с базой данных.
-
     Пример использования:
     record_user_to_db(user_id, username, first_name, last_name, date_now)
-
     """
     try:
         conn = sqlite3.connect(database)  # Замените 'your_database.db' на имя вашей базы данных
